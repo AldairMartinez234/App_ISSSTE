@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_ISSSTE.Pages.MenuPage">
+    <MasterDetailPage.Master>
+        <ContentPage Title="Menú">
+            <Grid BackgroundColor="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="200" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid>
+
+                    <StackLayout Padding="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Image Source="issste.png"  WidthRequest="400" Margin="40"></Image>
+
+
+                    </StackLayout>
+                </Grid>
+                <StackLayout Grid.Row="1" Spacing="5">
+                    <ListView x:Name="navigationDrawerList"
+                  RowHeight="90"
+                  SeparatorVisibility="None"
+                  BackgroundColor="white"
+                  ItemSelected="OnMenuItemSelected"
+                             >
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout>
+                                        <!-- Main design for our menu items -->
+                                        <StackLayout VerticalOptions="FillAndExpand"
+                             Orientation="Horizontal"
+                             Padding="20,10,0,10"
+                             Spacing="10">
+
+                                            <Image Source="{Binding Icon}"
+                         WidthRequest="30"
+                         HeightRequest="30"
+                         VerticalOptions="Center" />
+
+                                            <Label Text="{Binding Title}"
+                         FontSize="Medium"
+                         VerticalOptions="Center"
+                         TextColor="Black"
+                                               FontAttributes="Bold"/>
+                                        </StackLayout>
+                                        <BoxView HeightRequest="1.5" BackgroundColor="#621132" />
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+                <Button 
+                Text="Cerrar Sesion"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="Red"
+                       TextColor="White"
+                       Clicked="Cerrar"/>
+
+                </StackLayout>
+            </Grid>
+        </ContentPage>
+    </MasterDetailPage.Master>
+
+    <MasterDetailPage.Detail>
+        <NavigationPage>
+
+        </NavigationPage>
+    </MasterDetailPage.Detail>
+    </MasterDetailPage>

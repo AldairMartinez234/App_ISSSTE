@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_ISSSTE.Pages.DatosPacientes">
+    <StackLayout Margin="5" 
+                 Orientation="Vertical"  
+                 Spacing="20">
+        <StackLayout IsVisible="false">
+            <Label                         
+                Text=""      
+                x:Name="Id"/>
+        </StackLayout>
+        <ListView x:Name="listadatos"               
+                  CachingStrategy="RecycleElement"              
+                  HasUnevenRows="True"              
+                  RowHeight="90"
+                  SeparatorVisibility="Default">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell IsEnabled="False">
+                        <Grid>
+                            <StackLayout IsVisible="False"  
+                                         BackgroundColor="Aqua">
+                                <Label x:Name="Id"
+                                       Text="{Binding id}"/>
+                            </StackLayout>
+                            <Label Grid.Row="1"
+                                   Text="Nombre:"
+                                   FontAttributes="Bold"
+                                   FontSize="Large"/>
+                            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding nombre}"/>
+                            <Label Grid.Row="2"
+                                   Text="Direccion:"
+                                   FontAttributes="Bold"
+                                     FontSize="Large"/>
+                            <Label Grid.Row="2"
+                                   Grid.Column="1"
+                                   Text="{Binding calle}"/>
+                            <Label Grid.Row="3"
+                                   Text="Refencia:"
+                                   FontAttributes="Bold"
+                                     FontSize="Large"/>
+                            <Label Grid.Row="3"
+                                   Grid.Column="1"
+                                   Text="{Binding referencias}"/>
+                            <Label Grid.Row="4"
+                                   Text="Telefono:"
+                                   FontAttributes="Bold"
+                                     FontSize="Large"/>
+                            <Label Grid.Row="4"
+                                   Grid.Column="1"
+                                   Text="{Binding telefono}"/>
+                            <Label Grid.Row="5"
+                                   Text="Servicio:"
+                                   FontAttributes="Bold" 
+                                     FontSize="Large"/>
+                            <Label Grid.Row="5"
+                                   Grid.Column="1"
+                                   Text="{Binding Servicio}"/>
+                            <Label Grid.Row="6"
+                                   Text="Cantidad:"
+                                   FontAttributes="Bold"       
+                                     FontSize="Large"/>
+                            <Label Grid.Row="6"
+                                   Grid.Column="1"
+                                   Text="{Binding Dosis}"/>
+
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackLayout Margin="20" 
+                     Spacing="20">
+            <Label                   
+                Grid.Row="1"                                             
+                Grid.Column="1" 
+                FontAttributes="Bold"                   
+                FontSize="Large"
+                Text="Ingrese Codigo">
+            </Label>
+
+            <Entry             
+                Grid.Row="2"             
+                HeightRequest="46"            
+                IsPassword="True"             
+                Placeholder="Codigo "                   
+                Text="{Binding Codigo}"                   
+                x:Name="Codigo"/>
+
+            <Button     
+                HorizontalOptions="FillAndExpand"       
+                Text="Registrar Entrega"       
+                BackgroundColor="#91272e"        
+                TextColor="White"
+                Clicked="Registro"/>
+            
+        </StackLayout>
+    </StackLayout>
+</ContentPage>
