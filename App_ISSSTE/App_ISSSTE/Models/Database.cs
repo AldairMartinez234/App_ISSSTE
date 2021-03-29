@@ -9,22 +9,25 @@ using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace App_ISSSTE.Models
 {
     public class Database
     {
+        private static readonly AsyncLock Mutex = new AsyncLock();
         readonly SQLiteAsyncConnection _database;
         public List<Pacientes> pacientes;
         public ObservableCollection<Pacientes> _posts;
         public Database(string dbPath)
         {
-
             //Establishing the conection
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
             _database.CreateTableAsync<Pedidos>().ConfigureAwait(false);
+            _database.DropTableAsync<Users>().ConfigureAwait(false);
+            _database.CreateTableAsync<Users>().ConfigureAwait(false);
         }
 
         // Show the registers
@@ -41,21 +44,27 @@ namespace App_ISSSTE.Models
         // Save register
         public async void LoadPacientes()
         {
-            HttpClient client = new HttpClient
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
-                BaseAddress = new Uri(Constants.BaseApiAddress)
-            };
-            string url = string.Format("api/vista_paciente");
-            var response = await client.GetAsync(url);
-            string result = response.Content.ReadAsStringAsync().Result;
+                
+            }
+            else
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri(Constants.BaseApiAddress);
+                string url = string.Format("api/vista_paciente");
+                var response = await client.GetAsync(url);
+                string result = response.Content.ReadAsStringAsync().Result;
+                
 
-            //await _database.DropTableAsync<Pacientes>().ConfigureAwait(false);
-            await _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
-            this.pacientes = JsonConvert.DeserializeObject<List<Pacientes>>(result);
-            _posts = new ObservableCollection<Pacientes>(this.pacientes);
-            await _database.UpdateAllAsync(_posts).ConfigureAwait(false);
+                //await _database.DropTableAsync<Pacientes>().ConfigureAwait(false);
+                //await _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
+                this.pacientes = JsonConvert.DeserializeObject<List<Pacientes>>(result);
+                _posts = new ObservableCollection<Pacientes>(this.pacientes);
+                await _database.UpdateAllAsync(_posts).ConfigureAwait(false);
+            }
+            
         }
-
 
         public async void UpdatePacientes(string sd)
         {
@@ -90,7 +99,45 @@ namespace App_ISSSTE.Models
             return _database.UpdateAsync(pacientes);
         }
 
+        public async Task<string> AddUser(Users user)
+        {
+            using (await Mutex.LockAsync().ConfigureAwait(false))
+            {
+                
+                var existingTodoItem = await _database.Table<Users>()
+                        .Where(x => x.Email == user.Email)
+                        .FirstOrDefaultAsync();
 
+
+                if (existingTodoItem == null)
+                {
+                    await _database.InsertAsync(user);
+                    return "Añadido exitosamente";
+                }
+                else
+                {
+
+                    return "Ya existe el mismo correo";
+                }
+            }
+        }
+
+        public async Task<bool> LoginValidate(string userName1, string pwd1)
+        {
+            using (await Mutex.LockAsync().ConfigureAwait(false))
+            {
+                var existingTodoItem = await _database.Table<Users>()
+                        .Where(x => x.Email == userName1 && x.Password == pwd1)
+                        .FirstOrDefaultAsync();
+
+                if (existingTodoItem != null)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
     }
 }
 

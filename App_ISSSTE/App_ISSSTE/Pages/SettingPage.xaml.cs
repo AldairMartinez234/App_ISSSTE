@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -24,6 +25,14 @@ namespace App_ISSSTE.Pages
         public SettingPage()
         {
             InitializeComponent();
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                DisplayAlert("IMPORTANTE", "La aplicación esta sin internet, asi que solo funcionara con los datos almacenados previamente.", "Aceptar");
+            }
+            else
+            {
+                DisplayAlert("URGENTE", "Se recomienda sincronizar los datos", "Aceptar");
+            }
             MyListView.RefreshCommand = new Command(() =>
             {
                 LoadRefreshing();
@@ -103,6 +112,7 @@ namespace App_ISSSTE.Pages
         {
             var databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "control_issste1.db3");
             var db = new SQLiteConnection(databasePath);
+            SQLiteConnection connection = new SQLiteConnection(databasePath);
             var keyWord = PacientesSearched.Text;
             if (keyWord.Length >= 1)
             {

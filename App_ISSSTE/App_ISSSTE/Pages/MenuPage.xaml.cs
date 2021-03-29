@@ -10,7 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -24,6 +24,7 @@ namespace App_ISSSTE.Pages
         public MenuPage()
         {
             InitializeComponent();
+            
             NavigationPage.SetHasNavigationBar(this, false);
             MenuList = new List<MasterPageItem>
             {

@@ -86,6 +86,14 @@
                 TextColor="White"
                     x:Name="ButtonLogin"
         Clicked="ButtonLogin_Clicked"/>
+                    <Button  TextColor="White" 
+                             Clicked="Button_Clicked" 
+                             Text="Registrarse" 
+                             FontSize="Medium" 
+                             BackgroundColor="#00b33c"  
+                             CornerRadius="5" 
+                             FlexLayout.AlignSelf="Stretch"  
+                             HorizontalOptions="CenterAndExpand" />
                 </StackLayout>
             </StackLayout>
         </ScrollView>

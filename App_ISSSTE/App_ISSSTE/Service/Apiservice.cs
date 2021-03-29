@@ -12,33 +12,7 @@ namespace App_ISSSTE.Service
 {
     internal class ApiService<T>
     {
-        public async Task<bool> RegisterUserAsync(string id, string email, string password)
-        {
-            var Client = new HttpClient();
-
-            var model = new Users
-            {
-                Id = id,
-                Email = email,
-                Password = password,
-            };
-
-            var json = JsonConvert.SerializeObject(model);
-
-            HttpContent httpContent = new StringContent(json);
-
-            httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            var response = await Client.PostAsync(Constants.BaseApiAddress + "api/register", httpContent);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-
-            return false;
-
-        }
+       
 
         public async Task<bool> LoginAsync(string userName, string password)
         {

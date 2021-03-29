@@ -1,4 +1,5 @@
-﻿using App_ISSSTE.Helpers;
+﻿using Acr.UserDialogs;
+using App_ISSSTE.Helpers;
 using App_ISSSTE.Models;
 using SQLite;
 using System;
@@ -34,6 +35,7 @@ namespace App_ISSSTE.Pages
 
         public async void Registro(object sender, EventArgs e)
         {
+            UserDialogs.Instance.ShowLoading("Verificando codigo...");
             var databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "control_issste1.db3");
             var db = new SQLiteConnection(databasePath);
 
@@ -46,6 +48,8 @@ namespace App_ISSSTE.Pages
             };
             string url = string.Format("api/paciente/entregados/");
             string response = await client.GetStringAsync(url + Id.Text +"/"+ Codigo.Text);
+            UserDialogs.Instance.HideLoading();
+            await DisplayAlert("Verificacion", "Codigo Correcto", "OK");
         }
     }
 }

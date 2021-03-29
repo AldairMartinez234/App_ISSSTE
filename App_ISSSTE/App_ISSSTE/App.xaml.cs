@@ -10,7 +10,7 @@ namespace App_ISSSTE
     public partial class App : Application
     {
         static Database database;
-
+        static UserDB userDB;
         public static Database Database
         {
             get
@@ -20,6 +20,18 @@ namespace App_ISSSTE
                     database = new Database(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "control_issste1.db3"));
                 }
                 return database;
+            }
+        }
+
+        public static UserDB UserDB
+        {
+            get
+            {
+                if (userDB == null)
+                {
+                    userDB = new UserDB(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "control_issste1.db3"));
+                }
+                return userDB;
             }
         }
 

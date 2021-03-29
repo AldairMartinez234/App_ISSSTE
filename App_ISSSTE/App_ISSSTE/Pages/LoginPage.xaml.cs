@@ -21,31 +21,37 @@ namespace App_ISSSTE.Pages
         public LoginPage()
         {
             InitializeComponent();
-
         }
 
         private async void ButtonLogin_Clicked(object sender, EventArgs e)
         {
             UserDialogs.Instance.ShowLoading("Iniciando Sesion...");
-            
-            LoginService services = new LoginService();
-            LoginModel loginviewmodel = new LoginModel();
-            var getLoginDetails = await services.CheckLoginIfExists(EntryUsername.Text, EntryPassword.Text);
-
-            if (getLoginDetails)
+            if (EntryUsername.Text != null && EntryPassword.Text != null)
             {
-                
-               
-                Navigation.InsertPageBefore(new MenuPage (), this);
-                await Navigation.PopAsync();
-                
+                var validData = App.Database.LoginValidate(EntryUsername.Text, EntryPassword.Text);
+                if (await validData == true)
+                {
+                    Navigation.InsertPageBefore(new MenuPage(), this);
+                    await Navigation.PopAsync();
+                    UserDialogs.Instance.HideLoading();
+                }
+                else
+                {
+                    await DisplayAlert("Error de inicio de sesion", "Usuario o contraseña incorrectos", "Aceptar");
+                    UserDialogs.Instance.HideLoading();
+                }
 
             }
             else
             {
-                await DisplayAlert("Error", "El correo o la contraseña son incorrectos o no existen", "Aceptar");
+                await DisplayAlert("Advertencia", "Ingrese email y contraseña por favor", "Aceptar");
+                UserDialogs.Instance.HideLoading();
             }
-            UserDialogs.Instance.HideLoading();
+        }
+
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new RegistarUser());
         }
     }
 }
