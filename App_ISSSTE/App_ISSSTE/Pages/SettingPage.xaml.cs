@@ -28,19 +28,21 @@ namespace App_ISSSTE.Pages
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
                 DisplayAlert("IMPORTANTE", "La aplicación esta sin internet, asi que solo funcionara con los datos almacenados previamente.", "Aceptar");
+                App.Database.CargarInicial();
             }
             else
             {
                 DisplayAlert("URGENTE", "Se recomienda sincronizar los datos", "Aceptar");
+                App.Database.LoadPacientes();
+                App.Database.CargarInicial();
+                this.LoadPacientes();
             }
             MyListView.RefreshCommand = new Command(() =>
             {
                 LoadRefreshing();
             });
             Buscador.IsVisible = false;
-            App.Database.LoadPacientes();
-            App.Database.CargarInicial();
-            this.LoadPacientes();
+           
         }
 
         public async void LoadPacientes()
