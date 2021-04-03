@@ -25,7 +25,7 @@ namespace App_ISSSTE.Models
             //Establishing the conection
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
-            _database.CreateTableAsync<Pedidos>().ConfigureAwait(false)
+            _database.CreateTableAsync<Pedidos>().ConfigureAwait(false);
             _database.CreateTableAsync<Users>().ConfigureAwait(false);
         }
 
