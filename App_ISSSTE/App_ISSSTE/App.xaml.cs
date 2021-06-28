@@ -40,6 +40,8 @@ namespace App_ISSSTE
             InitializeComponent();
             
             MainPage = new NavigationPage(new LoginPage());
+
+            MainPage.SetValue(NavigationPage.BarBackgroundColorProperty, Color.FromHex("621432"));
         }
 
 

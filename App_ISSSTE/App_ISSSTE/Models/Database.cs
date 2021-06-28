@@ -4,6 +4,7 @@ using App_ISSSTE.Pages;
 using Newtonsoft.Json;
 using SQLite;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -43,24 +44,54 @@ namespace App_ISSSTE.Models
         // Save register
         public async void LoadPacientes()
         {
-            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-            {
-                
-            }
-            else
-            {
+            if(Connectivity.NetworkAccess == NetworkAccess.Internet)
+            { 
+              //http://192.168.1.82:8000/
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(Constants.BaseApiAddress);
                 string url = string.Format("api/vista_paciente");
                 var response = await client.GetAsync(url);
                 string result = response.Content.ReadAsStringAsync().Result;
-                
 
                 //await _database.DropTableAsync<Pacientes>().ConfigureAwait(false);
-                //await _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
+               //await _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
                 this.pacientes = JsonConvert.DeserializeObject<List<Pacientes>>(result);
                 _posts = new ObservableCollection<Pacientes>(this.pacientes);
-                await _database.UpdateAllAsync(_posts).ConfigureAwait(false);
+                                           ///Select count(*) from Pacientes; = numero entero =10
+                var existpaciente = await _database.Table<Pacientes>().CountAsync().ConfigureAwait(false);
+                if (existpaciente != 0)
+                {
+                    await InsertTable();
+                }
+                else
+                {
+                   await _database.InsertAllAsync(_posts).ConfigureAwait(false);
+                }
+            }
+        }
+
+        public async Task InsertTable()
+        {
+            for (int i = 0; i < _posts.Count; i++)
+            {
+               
+                using (await Mutex.LockAsync().ConfigureAwait(false))
+                {
+                    string id = _posts[i].id;
+                    //Select * from pacientes where id= 1
+                    var existpacientes = await _database.Table<Pacientes>()
+                            .Where(x => x.id == id)
+                            .FirstOrDefaultAsync();
+                    if (existpacientes == null)
+                    {
+                        await _database.InsertAsync(_posts[i]).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        _posts[i].id = existpacientes.id;
+                        await _database.UpdateAllAsync(_posts).ConfigureAwait(false);  
+                    }
+                }
             }
             
         }

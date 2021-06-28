@@ -89,11 +89,11 @@
                     <Button  TextColor="White" 
                              Clicked="Button_Clicked" 
                              Text="Registrarse" 
-                             FontSize="Medium" 
-                             BackgroundColor="#00b33c"  
+                             BackgroundColor="#621132"  
                              CornerRadius="5" 
-                             FlexLayout.AlignSelf="Stretch"  
-                             HorizontalOptions="CenterAndExpand" />
+                             HeightRequest="46"
+                             BorderRadius="23"
+                             HorizontalOptions="FillAndExpand" />
                 </StackLayout>
             </StackLayout>
         </ScrollView>

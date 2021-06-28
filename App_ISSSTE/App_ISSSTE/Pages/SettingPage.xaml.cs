@@ -22,6 +22,7 @@ namespace App_ISSSTE.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingPage : ContentPage
     {
+        
         public SettingPage()
         {
             InitializeComponent();
@@ -29,6 +30,7 @@ namespace App_ISSSTE.Pages
             {
                 DisplayAlert("IMPORTANTE", "La aplicación esta sin internet, asi que solo funcionara con los datos almacenados previamente.", "Aceptar");
                 App.Database.CargarInicial();
+                this.LoadPacientes();
             }
             else
             {
