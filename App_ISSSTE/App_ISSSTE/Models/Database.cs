@@ -21,6 +21,8 @@ namespace App_ISSSTE.Models
         readonly SQLiteAsyncConnection _database;
         public List<Pacientes> pacientes;
         public ObservableCollection<Pacientes> _posts;
+        public List<Users> users;
+        public ObservableCollection<Users> _posts1;
         public Database(string dbPath)
         {
             //Establishing the conection
@@ -42,32 +44,85 @@ namespace App_ISSSTE.Models
         }
 
         // Save register
+
+        public async void LoadUser()
+        {
+            Console.WriteLine("Hola mi amor Te amo");
+            //http://192.168.1.82:8000/
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(Constants.BaseApiAddress);
+            string url = string.Format("api/users");
+            var response = await client.GetAsync(url);
+            string result = response.Content.ReadAsStringAsync().Result;
+
+            //await _database.DropTableAsync<Pacientes>().ConfigureAwait(false);
+            //await _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
+            this.users = JsonConvert.DeserializeObject<List<Users>>(result);
+            _posts1 = new ObservableCollection<Users>(this.users);
+            ///Select count(*) from Pacientes; = numero entero =10
+            var existuser = await _database.Table<Users>().CountAsync().ConfigureAwait(false);
+           
+            if (existuser != 0)
+            {
+                await InsertTable_User();
+            }
+            else
+            {
+                await _database.InsertAllAsync(_posts1).ConfigureAwait(false);
+            }
+
+        }
+        
         public async void LoadPacientes()
         {
-            if(Connectivity.NetworkAccess == NetworkAccess.Internet)
-            { 
-              //http://192.168.1.82:8000/
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(Constants.BaseApiAddress);
-                string url = string.Format("api/vista_paciente");
-                var response = await client.GetAsync(url);
-                string result = response.Content.ReadAsStringAsync().Result;
+            //http://192.168.1.82:8000/
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(Constants.BaseApiAddress);
+            string url = string.Format("api/vista_paciente");
+            var response = await client.GetAsync(url);
+            string result = response.Content.ReadAsStringAsync().Result;
 
-                //await _database.DropTableAsync<Pacientes>().ConfigureAwait(false);
-               //await _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
-                this.pacientes = JsonConvert.DeserializeObject<List<Pacientes>>(result);
-                _posts = new ObservableCollection<Pacientes>(this.pacientes);
-                                           ///Select count(*) from Pacientes; = numero entero =10
-                var existpaciente = await _database.Table<Pacientes>().CountAsync().ConfigureAwait(false);
-                if (existpaciente != 0)
+            //await _database.DropTableAsync<Pacientes>().ConfigureAwait(false);
+            //await _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
+            this.pacientes = JsonConvert.DeserializeObject<List<Pacientes>>(result);
+            _posts = new ObservableCollection<Pacientes>(this.pacientes);
+            ///Select count(*) from Pacientes; = numero entero =10
+            var existpaciente = await _database.Table<Pacientes>().CountAsync().ConfigureAwait(false);
+            if (existpaciente != 0)
+            {
+                await InsertTable();
+            }
+            else
+            {
+                await _database.InsertAllAsync(_posts).ConfigureAwait(false);
+            }
+
+        }
+
+        public async Task InsertTable_User()
+        {
+            for (int i = 0; i < _posts1.Count; i++)
+            {
+
+                using (await Mutex.LockAsync().ConfigureAwait(false))
                 {
-                    await InsertTable();
-                }
-                else
-                {
-                   await _database.InsertAllAsync(_posts).ConfigureAwait(false);
+                    string Id = _posts1[i].Id_user;
+                    //Select * from pacientes where id= 1
+                    var existuser = await _database.Table<Users>()
+                            .Where(x => x.Id_user == Id)
+                            .FirstOrDefaultAsync();
+                    if (existuser == null)
+                    {
+                        await _database.InsertAsync(_posts1[i]).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        _posts1[i].Id_user = existuser.Id_user;
+                        await _database.UpdateAllAsync(_posts1).ConfigureAwait(false);
+                    }
                 }
             }
+
         }
 
         public async Task InsertTable()

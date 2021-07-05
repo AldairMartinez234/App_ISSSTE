@@ -10,6 +10,8 @@ namespace App_ISSSTE.Models
         [PrimaryKey,AutoIncrement]
         public int Id { get; set; }
         [MaxLength(255)]
+        public string Id_user { get; set; }
+        [MaxLength(255)]
         public string Name { get; set; }
         [MaxLength(255)]
         public string Rol { get; set; }
