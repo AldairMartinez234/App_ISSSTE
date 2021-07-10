@@ -47,7 +47,6 @@ namespace App_ISSSTE.Models
 
         public async void LoadUser()
         {
-            Console.WriteLine("Hola mi amor Te amo");
             //http://192.168.1.82:8000/
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(Constants.BaseApiAddress);
