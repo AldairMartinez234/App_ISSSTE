@@ -21,8 +21,7 @@ namespace App_ISSSTE.Models
         readonly SQLiteAsyncConnection _database;
         public List<Pacientes> pacientes;
         public ObservableCollection<Pacientes> _posts;
-        public List<Users> users;
-        public ObservableCollection<Users> _posts1;
+      
         public Database(string dbPath)
         {
             //Establishing the conection
