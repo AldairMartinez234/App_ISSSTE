@@ -139,7 +139,6 @@ namespace App_ISSSTE.Pages
 
             App.Database.UpdatePacientes(myselectitem.id);
             HideSidePacientesBus();
-
         }
     }
 }
