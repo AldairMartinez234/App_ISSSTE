@@ -21,7 +21,10 @@ namespace App_ISSSTE.Models
         readonly SQLiteAsyncConnection _database;
         public List<Pacientes> pacientes;
         public ObservableCollection<Pacientes> _posts;
-      
+        public List<Users> users;
+        public ObservableCollection<Users> _posts1;
+        public List<Municipio> municipios;
+        public ObservableCollection<Municipio> _posts2;
         public Database(string dbPath)
         {
             //Establishing the conection
@@ -29,6 +32,7 @@ namespace App_ISSSTE.Models
             _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
             _database.CreateTableAsync<Pedidos>().ConfigureAwait(false);
             _database.CreateTableAsync<Users>().ConfigureAwait(false);
+            _database.CreateTableAsync<municipio>().ConfigureAwait(false);
         }
 
         // Show the registers
@@ -222,6 +226,41 @@ namespace App_ISSSTE.Models
                     return false;
             }
         }
+
+        public Task<List<municipio>> GetPeopleAsyncmuni()
+        {
+            return _database.Table<municipio>().ToListAsync();
+        }
+
+      
+        public async void Loadmuni()
+        {
+            //http://192.168.1.82:8000/
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(Constants.BaseApiAddress);
+            string url = string.Format("api/vista_municipio");
+            var response = await client.GetAsync(url);
+            string result = response.Content.ReadAsStringAsync().Result;
+
+            //await _database.DropTableAsync<Pacientes>().ConfigureAwait(false);
+            //await _database.CreateTableAsync<Pacientes>().ConfigureAwait(false);
+            this.municipios =JsonConvert.DeserializeObject<List<Municipio>>(result);
+            _posts2 = new ObservableCollection<Municipio>(this.municipios);
+            ///Select count(*) from Pacientes; = numero entero =10
+            var existuser = await _database.Table<Municipio>().CountAsync().ConfigureAwait(false);
+
+            if (existuser != 0)
+            {
+           
+            }
+            else
+            {
+                await _database.InsertAllAsync(_posts2).ConfigureAwait(false);
+            }
+
+        }
+
+
     }
 }
 

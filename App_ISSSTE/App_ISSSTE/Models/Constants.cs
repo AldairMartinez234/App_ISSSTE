@@ -6,6 +6,6 @@ namespace App_ISSSTE.Models
 {
     class Constants
     {
-        public static string BaseApiAddress => "http://192.168.1.82:8000/";
+        public static string BaseApiAddress => "http://192.168.2.10:8000";
     }
 }
