@@ -101,7 +101,6 @@ namespace App_ISSSTE.Pages
             Grid stackLayout = (Grid)buttonClickHandler.Parent;
             Label label = (Label)stackLayout.Children[0];
             string id = label.Text;
-            Console.WriteLine("Holaaaaaa amor = " + id);
             await Navigation.PushAsync(new DatosPacientes(id));
 
         }

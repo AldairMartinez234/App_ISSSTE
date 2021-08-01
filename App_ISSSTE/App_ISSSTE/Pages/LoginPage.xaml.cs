@@ -20,7 +20,6 @@ namespace App_ISSSTE.Pages
         
         public LoginPage()
         {
-            App.Database.LoadUser();
             InitializeComponent();
         }
 

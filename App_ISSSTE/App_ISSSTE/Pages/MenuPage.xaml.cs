@@ -32,7 +32,7 @@ namespace App_ISSSTE.Pages
                 //Adding menu items to menuList and you can define title ,page and icon
                 new MasterPageItem() { Title = "Inicio", Icon = "casa.png", TargetType = typeof(HomePage) },
                 new MasterPageItem() { Title = "Por entregar", Icon = "porentregar.png", TargetType = typeof(SettingPage) },
-                new MasterPageItem() { Title = "Entregados", Icon = "carro.png", TargetType = typeof(municipio) },
+                new MasterPageItem() { Title = "Entregados", Icon = "carro.png", TargetType = typeof(DatosPacientes) },
                 new MasterPageItem() { Title = "Respaldo", Icon = "estadistica.png", TargetType = typeof(LogoutPage) }
             };
 
