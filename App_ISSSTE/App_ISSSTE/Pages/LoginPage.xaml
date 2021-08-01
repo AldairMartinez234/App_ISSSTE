@@ -28,7 +28,7 @@
 
                 </Label>
                 <Entry
-                Keyboard="Email"
+                Keyboard="Default"
                 Placeholder="Ingrese su usuario"
                     Text="{Binding Username}"
                     x:Name="EntryUsername"/>

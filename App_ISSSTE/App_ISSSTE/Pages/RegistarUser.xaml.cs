@@ -20,7 +20,6 @@ namespace App_ISSSTE.Pages
         {
             InitializeComponent();
             NavigationPage.SetHasBackButton(this, false);
-            userEntry.ReturnCommand = new Command(() => emailEntry.Focus());
             emailEntry.ReturnCommand = new Command(() => userNameEntry.Focus());
             userNameEntry.ReturnCommand = new Command(() => passwordEntry.Focus());
             passwordEntry.ReturnCommand = new Command(() => confirmpasswordEntry.Focus());
@@ -29,10 +28,10 @@ namespace App_ISSSTE.Pages
 
         private async void signUp_Clicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(userEntry.Text) || string.IsNullOrWhiteSpace(userNameEntry.Text) || string.IsNullOrWhiteSpace(emailEntry.Text) ||
-                string.IsNullOrWhiteSpace(passwordEntry.Text) || string.IsNullOrWhiteSpace(rol.Text) ||
-                string.IsNullOrEmpty(userNameEntry.Text) || string.IsNullOrEmpty(emailEntry.Text) ||
-                string.IsNullOrEmpty(passwordEntry.Text) || string.IsNullOrEmpty(rol.Text))
+            if ((string.IsNullOrWhiteSpace(userNameEntry.Text)) || (string.IsNullOrWhiteSpace(emailEntry.Text)) ||
+                (string.IsNullOrWhiteSpace(passwordEntry.Text)) || (string.IsNullOrWhiteSpace(rol.Text)) ||
+                (string.IsNullOrEmpty(userNameEntry.Text)) || (string.IsNullOrEmpty(emailEntry.Text)) ||
+                (string.IsNullOrEmpty(passwordEntry.Text)) || (string.IsNullOrEmpty(rol.Text)))
 
             {
                 await DisplayAlert("Introducir datos", "Ingrese datos válidos", "Aceptar");
@@ -47,7 +46,6 @@ namespace App_ISSSTE.Pages
             }
             else
             {
-                user.Id_user = userEntry.Text;
                 user.Email = emailEntry.Text;
                 user.Name = userNameEntry.Text;
                 user.Password = passwordEntry.Text;
@@ -67,7 +65,6 @@ namespace App_ISSSTE.Pages
                     {
                         await DisplayAlert("Agregar usuario", returns, "Aceptar");
                         warningLabel.IsVisible = false;
-                        userEntry.Text = string.Empty;
                         emailEntry.Text = string.Empty;
                         userNameEntry.Text = string.Empty;
                         passwordEntry.Text = string.Empty;
